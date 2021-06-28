@@ -1,0 +1,5 @@
+bump:
+  recurse: false
+  file: 'lib/solidus_vend/version.rb'
+  message: Bump SolidusVend to %{version}
+  tag: true
