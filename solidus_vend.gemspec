@@ -5,11 +5,11 @@ require_relative 'lib/solidus_vend/version'
 Gem::Specification.new do |spec|
   spec.name = 'solidus_vend'
   spec.version = SolidusVend::VERSION
-  spec.authors = ['TODO: Write your name']
-  spec.email = 'TODO: Write your email address'
+  spec.authors = ['Victor ter Hark']
+  spec.email = 'victor@afurastore.com'
 
-  spec.summary = 'TODO: Write a short summary, because RubyGems requires one.'
-  spec.description = 'TODO: Write a longer description or delete this line.'
+  spec.summary = 'Two way integration with Solidus and VendHQ POS'
+  spec.description = 'Two way integration with Solidus and VendHQ POS'
   spec.homepage = 'https://github.com/solidusio-contrib/solidus_vend#readme'
   spec.license = 'BSD-3-Clause'
 
