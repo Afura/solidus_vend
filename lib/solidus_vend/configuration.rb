@@ -1,10 +1,16 @@
 # frozen_string_literal: true
+require 'vend'
 
 module SolidusVend
   class Configuration
-    # Define here the settings for this extension, e.g.:
-    #
-    # attr_accessor :my_setting
+    attr_accessor(
+      :access_token,
+      :domain_prefix,
+      :stock_location,
+    )
+  end
+
+  def intiliaze
   end
 
   class << self

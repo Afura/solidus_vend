@@ -31,6 +31,17 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'solidus_core', ['>= 2.0.0', '< 4']
   spec.add_dependency 'solidus_support', '~> 0.5'
+  spec.add_dependency 'solidus_webhooks'
+  spec.add_dependency 'vend-ruby-v2'
 
-  spec.add_development_dependency 'solidus_dev_support', '~> 2.5'
+  # spec.add_dependency 'httparty'
+  # spec.add_dependency 'faraday'
+
+  spec.add_development_dependency 'solidus_dev_support'
+  spec.add_development_dependency 'pry-rescue'
+  spec.add_development_dependency 'pry-stack_explorer'
+  spec.add_development_dependency 'shoulda-matchers', '~> 5.0'
+  spec.add_development_dependency 'json-schema'
+  spec.add_development_dependency 'webmock'
+  spec.add_development_dependency 'vcr'
 end
