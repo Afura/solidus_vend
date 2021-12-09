@@ -18,15 +18,17 @@ module SolidusVend
           sku: variant.sku,
           name: vend_product_name,
           brand_name: variant.brand_name,
-          description: variant.description,
+          # description: variant.description,
           supplier_code: variant.style_code,
 
           supply_price: variant.cost_price.to_f,
           retail_price: variant.price.to_f,
 
-          active: variant.available?,
+          active: active?,
           track_inventory: variant.track_inventory
-        }.merge **variant_options, **vend_product_id
+        }
+        .merge **variant_options, **vend_product_id
+        .to_json
       end
 
       private
@@ -67,6 +69,15 @@ module SolidusVend
         # Filter Color
         # All descendants
         # Gender
+      end
+
+      # Determines if product is active in Vend. A product is available if it has not
+      # been deleted, the available_on date is in the past
+      # and the discontinue_on date is nil or in the future.
+      #
+      # @return [Boolean] true if this product is available
+      def active?
+        !deleted? && (available_on&.past? || nil?) && !discontinued?
       end
 
       # Return the Products Vend equivelant of its main tax component

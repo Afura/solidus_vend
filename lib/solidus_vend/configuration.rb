@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'vend'
-
 module SolidusVend
   class Configuration
     attr_accessor(

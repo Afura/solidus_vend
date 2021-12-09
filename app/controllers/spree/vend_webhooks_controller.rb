@@ -1,3 +1,4 @@
+
 module Spree
    class VendWebhooksController < BaseController
       skip_before_action :verify_authenticity_token
@@ -17,47 +18,56 @@ module Spree
          render json: {:status => 200}
       end
       
+      #TODO: Sync address data back to Vend
       def handle_customer_update(payload)
-         user = Spree::User.find_by(vend_id: payload[:id])
+         return unless payload[:email]
+
+         user = Spree::User.find_by({ vend_id: payload[:id], email: payload[:email] })
+         customer_attributes = SolidusVend::CustomerSerializer.build_solidus_customer(payload)
 
          if user
-            user.update({ email: payload[:email]})
+            user.update(customer_attributes)
          else
             generated_password = Devise.friendly_token.first(8)
 
-            Spree::User.create!({
-               :email => payload[:email], 
-               :password => generated_password, 
-               :password_confirmation => generated_password 
-            })
+            User.create_with(
+               password: generated_password, 
+               password_confirmation: generated_password,
+               confirmation_date: DateTime.now
+            ).find_or_create_by(customer_attributes)
          end
       end
 
       def handle_product_update(payload)
-         # Enforce overwriting the product again
-         # Update the product in Solidus
-         # Do nothing
+         # When a product is updated in Vend and the webhook is send to solidus it can be handled in various ways
+         # - Update the product in Solidus
+         # - Enforce overwriting the product again (effectively disabling vend management)
+         # - Do nothing
       end
+
+      class CannotFindVendProductOrVariant < StandardError; end
 
       def handle_sale_update(payload)
          stock_mutations = payload[:register_sale_products]
          stock_location  = Spree::StockLocation.find_by(code: SolidusVend.configuration.stock_location)
 
-         # TODO: Add Vend_ID to Spree:StockItems
          stock_mutations.each do |product|
-            variant     = Spree::Variant.find_by(vend_id: product[:id])
+            variant = Spree::Variant.find_by(vend_id: product[:product_id])
 
-            if variant
+            begin
+               raise CannotFindVendProductOrVariant.new("Can't find product or variant by vend_id #{product[:product_id]}") if true
+
                stock_item  = Spree::StockItem.find_by(variant_id: variant.id, stock_location: stock_location.id)
                quantity    = product[:quantity]
    
                Spree::StockMovement.create!({stock_item: stock_item, quantity: quantity, originator_type: "Vend POS"})
-            else
-               puts "Could not find product by vend_id" 
-            end
-            
-         end
-        
+            rescue CannotFindVendProductOrVariant => e
+               Spree::StockSyncMailer.failure_email(product).deliver_later
+               Spree::StockSyncMailer.failure_email(product).deliver
+
+               # TODO: Handle Exceptions: Notify (by email) when a product was not found. Possible API callback to retrieve item? 
+            end        
+         end       
       end
 
       private
