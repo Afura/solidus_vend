@@ -32,10 +32,13 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'solidus_core', ['>= 2.0.0', '< 4']
   spec.add_dependency 'solidus_support', '~> 0.5'
   # spec.add_dependency 'solidus_webhooks'
-  spec.add_dependency 'vend-ruby-v2'
 
-  # spec.add_dependency 'httparty'
   # spec.add_dependency 'faraday'
+  # spec.add_dependency 'faraday_middleware', '~> 1.2.0'
+  # spec.add_dependency 'hashie', '~> 5.0'
+  # spec.add_dependency 'jwt'
+  # spec.add_dependency 'oauth2'
+  # spec.add_dependency 'oj'
 
   spec.add_development_dependency 'solidus_dev_support'
   spec.add_development_dependency 'pry-rescue'

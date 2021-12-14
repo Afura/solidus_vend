@@ -1,5 +1,5 @@
 module SolidusVend
-   class VariantSerializer < ApplicationService
+  class VariantSerializer < ApplicationService
     attr_reader :variant
 
       def initialize(variant)
@@ -28,13 +28,12 @@ module SolidusVend
           track_inventory: variant.track_inventory
         }
         .merge **variant_options, **vend_product_id
-        .to_json
       end
 
       private
 
-      def vend_product_id
-        variant.vend_id ? variant.vend_id : {}
+      def vend_product_id     
+        variant.vend_id ? { id: variant.vend_id } : {}  
       end
 
       # Joins an arrat of values by seperator leaving out nil values.
@@ -77,7 +76,7 @@ module SolidusVend
       #
       # @return [Boolean] true if this product is available
       def active?
-        !deleted? && (available_on&.past? || nil?) && !discontinued?
+        !variant.deleted? && (variant.available_on&.past? || nil?) && !variant.discontinued?
       end
 
       # Return the Products Vend equivelant of its main tax component

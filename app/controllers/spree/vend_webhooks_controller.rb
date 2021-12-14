@@ -45,7 +45,7 @@ module Spree
          # - Do nothing
       end
 
-      class CannotFindVendProductOrVariant < StandardError; end
+      class VendProductOrVariantNotFound < StandardError; end
 
       def handle_sale_update(payload)
          stock_mutations = payload[:register_sale_products]
@@ -55,7 +55,7 @@ module Spree
             variant = Spree::Variant.find_by(vend_id: product[:product_id])
 
             begin
-               raise CannotFindVendProductOrVariant.new("Can't find product or variant by vend_id #{product[:product_id]}") if true
+               raise VendProductOrVariantNotFound.new("Can't find product or variant by vend_id #{product[:product_id]}") if true
 
                stock_item  = Spree::StockItem.find_by(variant_id: variant.id, stock_location: stock_location.id)
                quantity    = product[:quantity]
@@ -63,7 +63,6 @@ module Spree
                Spree::StockMovement.create!({stock_item: stock_item, quantity: quantity, originator_type: "Vend POS"})
             rescue CannotFindVendProductOrVariant => e
                Spree::StockSyncMailer.failure_email(product).deliver_later
-               Spree::StockSyncMailer.failure_email(product).deliver
 
                # TODO: Handle Exceptions: Notify (by email) when a product was not found. Possible API callback to retrieve item? 
             end        

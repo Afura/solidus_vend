@@ -1,7 +1,7 @@
 module SolidusVend
    class StockMutation
 
-      class CannotFindVendProductOrVariant < StandardError; end
+      class VendProductOrVariantNotFound < StandardError; end
 
       def call
          stock_mutations = payload[:register_sale_products]
@@ -11,7 +11,7 @@ module SolidusVend
             variant = Spree::Variant.find_by(vend_id: product[:product_id])
 
             begin
-               raise CannotFindVendProductOrVariant.new("Can't find product or variant by vend_id #{product[:product_id]}") if !variant
+               raise VendProductOrVariantNotFound.new("Can't find product or variant by vend_id #{product[:product_id]}") if !variant
 
                stock_item  = Spree::StockItem.find_by(variant_id: variant.id, stock_location: stock_location.id)
                quantity    = product[:quantity]
