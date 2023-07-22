@@ -1,10 +1,10 @@
 module Spree
    module VendVariantSubscriber
-      include Spree::Event::Subscriber
+      include Omnes::Subscriber
    
-      event_action :variant_created, event_name: :sync_product
-      event_action :variant_updated, event_name: :sync_product
-      event_action :variant_destroyed, event_name: :destroy_product
+      handle :variant_created, with: :sync_product
+      handle :variant_updated, with: :sync_product
+      handle :variant_destroyed, with: :destroy_product
    
       def sync_product(event)
          SolidusVend::SyncProductJob.perform_later(event.payload[:payload])

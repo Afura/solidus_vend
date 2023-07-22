@@ -11,6 +11,12 @@ module SolidusVend
 
     engine_name 'solidus_vend'
 
+    config.to_prepare do
+      SolidusVend::BrandSubscriber.new.subscribe_to(Spree::Bus)
+      SolidusVend::UserSubscriber.new.subscribe_to(Spree::Bus)
+      SolidusVend::VariantSubscriber.new.subscribe_to(Spree::Bus)
+    end
+
     # use rspec for tests
     config.generators do |g|
       g.test_framework :rspec

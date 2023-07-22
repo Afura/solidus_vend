@@ -1,10 +1,10 @@
 module Spree
    module VendBrandSubscriber
-      include Spree::Event::Subscriber
-   
-      event_action :brand_created, event_name: :sync_brand
-      event_action :brand_updated, event_name: :sync_brand
-      event_action :brand_destroyed, event_name: :destroy_brand
+      include Omnes::Subscriber
+
+      handle :brand_created, with: :sync_brand
+      handle :brand_updated, with: :sync_brand
+      handle :brand_destroyed, with: :destroy_brand
    
       def sync_brand(event)
          SolidusVend::SyncBrand.perform_later(event.payload[:payload])
@@ -19,17 +19,17 @@ module Spree
 
 #  module Spree
 #    module VendVariantSubscriber
-#       include Spree::Event::Subscriber
+#       include Omnes::Subscriber
    
 #       RESOURCES.each do |resource|
-#          event_action :resource_created, event_name: :sync_resource
-#          event_action :resource_updated, event_name: :sync_resource
-#          event_action :resource_destroyed, event_name: :destroy_resource
+#          handle :resource_created, with: :sync_resource
+#          handle :resource_updated, with: :sync_resource
+#          handle :resource_destroyed, with: :destroy_resource
 #       end
    
 #       def sync_resource(event)
 #          resource = event.payload[:payload]
-#          request = SolidusVend::SyncResource::RESOURCE.call(variant)
+#          request = SolidusVend::SyncResource::RESOURCE.call(resource)
          
 #          if request.success
 #             # variant.update(vend_last_sync: Time.now)

@@ -8,16 +8,16 @@ module SolidusVend
          end
 
          def user_created
-            ::Spree::Event.fire 'user_created', variant: self
+            Spree::Bus.publish :user_created, variant: self
          end
 
          def user_updated
             return unless self.saved_changes?
-            ::Spree::Event.fire 'user_updated', variant: self
+            Spree::Bus.publish :user_updated, variant: self
          end
 
          def user_destroyed
-            ::Spree::Event.fire 'user_destroyed', variant: self
+            Spree::Bus.publish :user_destroyed, variant: self
          end
             
          ::Spree::User.prepend self

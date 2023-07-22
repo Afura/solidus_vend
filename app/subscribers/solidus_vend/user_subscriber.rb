@@ -1,16 +1,16 @@
 module Spree
    module VendUserSubscriber
-      include Spree::Event::Subscriber
+      include Omnes::Subscriber
    
-      event_action :user_created, event_name: :sync_customer
-      event_action :user_updated, event_name: :sync_customer
-      event_action :user_destroyed, event_name: :delete_customer
+      handle :user_created, with: :sync_customer
+      handle :user_updated, with: :sync_customer
+      handle :user_destroyed, with: :destroy_customer
    
       def sync_customer(event)
          SolidusVend::SyncCustomer.perform_later(event.payload[:payload])
       end
 
-      def delete_customer(event)
+      def destroy_customer(event)
          SolidusVend::DeleteCustomerJob.perform_later(event.payload[:payload]) if event.payload[:payload].vend_id
       end
 

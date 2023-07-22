@@ -8,16 +8,16 @@ module SolidusVend
          end
 
          def variant_created
-            ::Spree::Event.fire 'variant_created', variant: self
+            Spree::Bus.publish :variant_created, variant: self
          end
 
          def variant_updated
             return unless self.saved_changes?
-            ::Spree::Event.fire 'variant_updated', variant: self
+            Spree::Bus.publish :variant_updated, variant: self
          end
 
          def variant_destroyed
-            ::Spree::Event.fire 'variant_destroyed', variant: self
+            Spree::Bus.publish :variant_destroyed, variant: self
          end
             
          ::Spree::Variant.prepend self
