@@ -1,5 +1,3 @@
-require "vend"
-
 module SolidusVend
    class Client
       attr_reader :domain_prefix, :access_token
