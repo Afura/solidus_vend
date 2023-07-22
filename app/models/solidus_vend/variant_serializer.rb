@@ -36,7 +36,7 @@ module SolidusVend
         variant.vend_id ? { id: variant.vend_id } : {}  
       end
 
-      # Joins an arrat of values by seperator leaving out nil values.
+      # Joins an array of values by seperator leaving out nil values.
       #
       # @return [String]
       def vend_product_name(seperator: " - ")
@@ -54,7 +54,7 @@ module SolidusVend
         end
       end
 
-      # Finds the the genderless top taxonomy (Apparel, Footwear, Accessories, Life).
+      # Finds the the top taxonomy (Apparel, Footwear, Accessories, Life).
       #
       # @return [String] string describing the genderless top taxonomy.
       def product_type
@@ -76,13 +76,14 @@ module SolidusVend
       #
       # @return [Boolean] true if this product is available
       def active?
-        !variant.deleted? && (variant.available_on&.past? || nil?) && !variant.discontinued?
+        !variant.deleted? && (variant.available_on&.past? || variant.available_on.nil?) && !variant.discontinued?
       end
 
       # Return the Products Vend equivelant of its main tax component
       #
       # @return [String]
       def tax_name
+        # variant.product.tax_category.vend_tax_name
         "BTW Hoog"
       end
 
