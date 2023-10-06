@@ -30,8 +30,10 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'solidus_core', ['>= 2.0.0', '< 5']
-  spec.add_dependency 'solidus_support', '~> 0.8'
+  spec.add_dependency 'solidus_support', '~> 0.5'
+
   spec.add_dependency 'solidus_webhooks'
+  spec.add_dependency 'vend'
 
   # spec.add_dependency 'faraday'
   # spec.add_dependency 'faraday_middleware', '~> 1.2.0'
